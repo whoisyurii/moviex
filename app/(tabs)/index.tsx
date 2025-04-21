@@ -21,7 +21,10 @@ export default function Index() {
       >
         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
         <View className="flex-1 mt-5">
-          <SearchBar />
+          <SearchBar
+            onPress={() => router.push("/search")} // by this routing function it pushes user to Search screen after clicking on Search for a movie input
+            placeholder="Search for a movie"
+          />
         </View>
       </ScrollView>
     </View>

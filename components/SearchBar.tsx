@@ -2,7 +2,14 @@ import { View, Text, Image, TextInput } from "react-native";
 import React from "react";
 import { icons } from "@/constants/icons";
 
-const SearchBar = () => {
+interface Props {
+  // interface tells RN app what type Props should be
+  placeholder: string;
+  onPress?: () => void;
+  /* The `?` indicates that this prop is optional, meaning it doesn't have to be provided when using the `SearchBar` component. () => void return means that we don't have to return nothing, rather to use router.push navigation functionality to push to a different URL*/
+}
+
+const SearchBar = ({ placeholder, onPress }: Props) => {
   return (
     <View className="flex-row items-center bg-dark-200 rounded-full px-5 py-4">
       <Image
@@ -12,8 +19,8 @@ const SearchBar = () => {
         tintColor="#ab8bff"
       />
       <TextInput
-        onPress={() => {}}
-        placeholder="Search"
+        onPress={onPress} // comes from index.tsx to route
+        placeholder={placeholder}
         value=""
         onChangeText={() => {}}
         placeholderTextColor="#a8b5db"
