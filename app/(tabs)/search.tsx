@@ -1,5 +1,5 @@
 import { View, Text, Image, FlatList, ActivityIndicator } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { images } from "@/constants/images";
 import MovieCard from "@/components/MovieCard";
 import { useRouter } from "expo-router";
@@ -15,6 +15,8 @@ const Search = () => {
     data: movies,
     loading,
     error,
+    refetch: loadMovies,
+    reset,
   } = useFetch(
     () =>
       fetchMovies({
@@ -22,8 +24,23 @@ const Search = () => {
         // if query: '' (doesn't exist) then it returns most popular movies, as we set it in fetchMovies endpoint query.
       }),
     false
-    // by defining this false we stop autoFetch from useFetch hook, which is set to true by default
+    // by defining this false we disable autoFetch from useFetch hook, which is set to true by default
   );
+
+  // Trigger refetch whenever searchQuery changes
+  useEffect(() => {
+    const timeoutId = setTimeout(async () => {
+      // set debouncing and async function with 500ms of timeout to load
+      if (searchQuery.trim()) {
+        // We use .trim() to remove extra spaces from the beginning and end of the searchQuery. This prevents calling refetch() when the user types only spaces (like " "), which isn't a valid search.
+        await loadMovies();
+      } else {
+        reset();
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
 
   return (
     <View className="flex-1 bg-primary">
@@ -55,7 +72,11 @@ const Search = () => {
               <Image source={icons.logo} className="w-12 h-10" />
             </View>
             <View className="my-5">
-              <SearchBar placeholder="Search movies..." />
+              <SearchBar
+                placeholder="Search movies..."
+                value={searchQuery}
+                onChangeText={(text: string) => setSearchQuery(text)}
+              />
             </View>
 
             {loading && (
@@ -73,6 +94,8 @@ const Search = () => {
 
             {!loading && !error && searchQuery.trim() && movies?.length > 0 && (
               // trim() removes spaces from the start and end of a string.
+              // The ! after length in movies?.length! > 0 is a non-null assertion operator in TypeScript. It tells TypeScript: "Trust me, length is not null or undefined here."
+              // It's used because movies might be undefined or null, so the optional chaining (?.) is used — but once accessed, length! asserts that it’s definitely a number.
               <Text className="text-xl text-white font-bold">
                 Search result for{" "}
                 <Text className="text-accent">{searchQuery}</Text>
