@@ -54,7 +54,7 @@ export default function Index() {
             <SearchBar
               onPress={() => router.push("/search")}
               // by this routing function it pushes user to Search screen after clicking on Search for a movie input
-              placeholder="Search for a movie"
+              placeholder="Search movies"
             />
             <>
               <Text className="text-lg text-white font-bold mt-5 mb-3">
