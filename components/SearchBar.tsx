@@ -6,9 +6,9 @@ interface Props {
   // interface tells RN app what type Props should be
   placeholder: string;
   onPress?: () => void;
+  value?: string;
+  onChangeText?: (text: string) => void;
   /* The `?` indicates that this prop is optional, meaning it doesn't have to be provided when using the `SearchBar` component. () => void return means that we don't have to return nothing, rather to use router.push navigation functionality to push to a different URL*/
-  value: string;
-  onChangeText: (text: string) => void;
 }
 
 const SearchBar = ({ placeholder, onPress, value, onChangeText }: Props) => {

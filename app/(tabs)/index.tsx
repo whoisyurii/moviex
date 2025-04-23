@@ -14,10 +14,16 @@ import { useRouter } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
 import MovieCard from "@/components/MovieCard";
+import { getTrendingMovies } from "@/services/appwrite";
 
 export default function Index() {
   const router = useRouter();
-  // hooks are the same as in React - start with useXXXXX
+
+  const {
+    data: trendingMovies,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useFetch(getTrendingMovies);
 
   const {
     data: movies,
@@ -41,14 +47,14 @@ export default function Index() {
         contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}
       >
         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
-        {moviesLoading ? (
+        {moviesLoading || trendingLoading ? (
           <ActivityIndicator
             size="large"
             color="#0000ff"
             className="mt-10 self-center"
           />
-        ) : moviesError ? (
-          <Text> Error: {moviesError?.message}</Text>
+        ) : moviesError || trendingError ? (
+          <Text> Error: {moviesError?.message || trendingError?.message}</Text>
         ) : (
           <View className="flex-1 mt-5">
             <SearchBar
@@ -56,10 +62,27 @@ export default function Index() {
               // by this routing function it pushes user to Search screen after clicking on Search for a movie input
               placeholder="Search movies"
             />
+            {trendingMovies && (
+              <View className="mt-10">
+                <Text className="text-lg text-white font-bold mb-3">
+                  Trending Movies
+                </Text>
+              </View>
+            )}
             <>
               <Text className="text-lg text-white font-bold mt-5 mb-3">
                 Latest Movies
               </Text>
+
+              <FlatList
+                data={trendingMovies}
+                renderItem={({ item, index }) => (
+                  <Text className="text-white text-sm">{item.title}</Text>
+                )}
+                keyExtractor={(item) => item.movie_id.toString()}
+                className="mb-4 mt-3"
+              />
+
               <FlatList
                 // <FlatList /> is a performant way to render large scrollable lists. Unlike <ScrollView/>, it only renders the visible items, which boosts performance and reduces memory usage
                 data={movies} // An array (or array-like list) of items to render.

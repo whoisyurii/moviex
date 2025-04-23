@@ -58,5 +58,23 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
   }
 };
 
+//// defining function for showing Trending Movies, based on count from AppWrite DB
+export const getTrendingMovies = async (): Promise<
+  TrendingMovie[] | undefined
+> => {
+  try {
+    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+      Query.limit(5), // show the top 5 movies
+      Query.orderDesc("count"),
+      // put them in descending order based on 'count' property, taken from DB Appwrite
+    ]);
+    return result.documents as unknown as TrendingMovie[];
+    // I've defined return as unknown or as TrendingMovie[] to match TypeScript expectations. Then it knows what exactly we are returning.
+  } catch (error) {
+    console.log("Error:", error);
+    return undefined;
+  }
+};
+
 //// Some side notes:
 // .documents comes from a database query result. It’s a list (array) of matching records (documents). Each "document" is like a data object in a collection (like a row in SQL).
