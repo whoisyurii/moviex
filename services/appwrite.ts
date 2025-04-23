@@ -5,14 +5,13 @@ import { Client, Databases, ID, Query } from "react-native-appwrite";
 // access keys
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
-
+const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!;
 //// setup new AppWrite client
 const client = new Client()
   // set default AppWrite endpoint
-  .setEndpoint("https://cloud.appwite.io/v1")
+  .setEndpoint("https://cloud.appwrite.io/v1")
   // then choose our project / pass an ID of it
-  .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
-
+  .setProject(PROJECT_ID);
 //// setup DataBase instance belonging to this AppWrite Client
 
 // initialize new database and pass the client that we wanna initialize this database on:
@@ -32,7 +31,6 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
       // check if a record of that search has already been stored ---
       // --- if a document is found - increment the searchCount field for the first element of the result array
       const existingMovie = result.documents[0];
-
       await database.updateDocument(
         // the list of options (createDocument, updateDocument, etc.) is coming from the database object. That object likely comes from an SDK (like Appwrite, Firebase, etc.), and these are its available methods you can use to interact with your database. I set these available methods in my Appwrite project settings.
         DATABASE_ID,
@@ -49,8 +47,8 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
       await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
         searchTerm: query,
         movie_id: movie.id,
-        count: 1,
         title: movie.title,
+        count: 1,
         poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
       });
     }
