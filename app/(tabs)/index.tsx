@@ -70,11 +70,11 @@ export default function Index() {
               </View>
             )}
             <>
-              <Text className="text-lg text-white font-bold mt-5 mb-3">
-                Latest Movies
-              </Text>
-
               <FlatList
+                horizontal // If true, renders items next to each other horizontally instead of stacked vertically.
+                showsHorizontalScrollIndicator={false} // When true, shows a horizontal scroll indicator.
+                ItemSeparatorComponent={() => <View className="w-4" />}
+                // It lets you insert a custom component (like a line or space) between each item. It won’t show at the very top or very bottom, nor end or beginning — only between items.
                 data={trendingMovies}
                 renderItem={({ item, index }) => (
                   <Text className="text-white text-sm">{item.title}</Text>
@@ -82,7 +82,9 @@ export default function Index() {
                 keyExtractor={(item) => item.movie_id.toString()}
                 className="mb-4 mt-3"
               />
-
+              <Text className="text-lg text-white font-bold mt-5 mb-3">
+                Latest Movies
+              </Text>
               <FlatList
                 // <FlatList /> is a performant way to render large scrollable lists. Unlike <ScrollView/>, it only renders the visible items, which boosts performance and reduces memory usage
                 data={movies} // An array (or array-like list) of items to render.

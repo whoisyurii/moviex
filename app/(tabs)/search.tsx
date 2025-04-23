@@ -35,16 +35,19 @@ const Search = () => {
       if (searchQuery.trim()) {
         // We use .trim() to remove extra spaces from the beginning and end of the searchQuery. This prevents calling refetch() when the user types only spaces (like " "), which isn't a valid search.
         await loadMovies();
-        if (movies?.length > 0 && movies?.[0])
-          await updateSearchCount(searchQuery, movies[0]);
+
         // receive appwrite search fn; pass the searchQuery and movies[0] to receive first movie you get back from searchQuery
       } else {
         reset();
       }
     }, 500);
-
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
+
+  useEffect(() => {
+    if (movies?.length > 0 && movies?.[0])
+      updateSearchCount(searchQuery, movies[0]);
+  }, [movies]);
 
   return (
     <View className="flex-1 bg-primary">
