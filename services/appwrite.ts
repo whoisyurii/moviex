@@ -64,7 +64,7 @@ export const getTrendingMovies = async (): Promise<
 > => {
   try {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-      Query.limit(5), // show the top 5 movies
+      Query.limit(3), // show the top 3 movies
       Query.orderDesc("count"),
       // put them in descending order based on 'count' property, taken from DB Appwrite
     ]);

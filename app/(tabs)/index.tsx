@@ -15,6 +15,7 @@ import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
 import MovieCard from "@/components/MovieCard";
 import { getTrendingMovies } from "@/services/appwrite";
+import TrendingCard from "@/components/TrendingCard";
 
 export default function Index() {
   const router = useRouter();
@@ -71,20 +72,19 @@ export default function Index() {
             )}
             <>
               <FlatList
-                horizontal // If true, renders items next to each other horizontally instead of stacked vertically.
+                horizontal // If true, renders items next to each other horizontally instead of stacked vertically. Allows to scroll them horizontally.
                 showsHorizontalScrollIndicator={false} // When true, shows a horizontal scroll indicator.
                 ItemSeparatorComponent={() => <View className="w-4" />}
                 // It lets you insert a custom component (like a line or space) between each item. It won’t show at the very top or very bottom, nor end or beginning — only between items.
                 data={trendingMovies}
                 renderItem={({ item, index }) => (
-                  <Text className="text-white text-sm">{item.title}</Text>
+                  <TrendingCard movie={item} index={index} />
+                  // passing a prop of movie={item} is an alternative way of spreading everything out. Sometimes it's better because we can console.log entire movie itself and see it's properties
                 )}
                 keyExtractor={(item) => item.movie_id.toString()}
                 className="mb-4 mt-3"
               />
-              <Text className="text-lg text-white font-bold mt-5 mb-3">
-                Latest Movies
-              </Text>
+
               <FlatList
                 // <FlatList /> is a performant way to render large scrollable lists. Unlike <ScrollView/>, it only renders the visible items, which boosts performance and reduces memory usage
                 data={movies} // An array (or array-like list) of items to render.
@@ -113,3 +113,6 @@ export default function Index() {
     </View>
   );
 }
+
+// Always keep an eye on usage of two vertical FlatLists on the same page/route!
+// That's why FlatList horizontal prop is important.
