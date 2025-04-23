@@ -31,13 +31,13 @@ const Search = () => {
   // Trigger refetch whenever searchQuery changes
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
-      // receive appwrite search fn; pass the searchQuery and movies[0] to receive first movie you get back from searchQuery
-      updateSearchCount(searchQuery, movies[0]);
-
       // set debouncing and async function with 500ms of timeout to load
       if (searchQuery.trim()) {
         // We use .trim() to remove extra spaces from the beginning and end of the searchQuery. This prevents calling refetch() when the user types only spaces (like " "), which isn't a valid search.
         await loadMovies();
+        if (movies?.length > 0 && movies?.[0])
+          await updateSearchCount(searchQuery, movies[0]);
+        // receive appwrite search fn; pass the searchQuery and movies[0] to receive first movie you get back from searchQuery
       } else {
         reset();
       }

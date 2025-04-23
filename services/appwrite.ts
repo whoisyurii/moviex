@@ -1,7 +1,8 @@
 import { Client, Databases, ID, Query } from "react-native-appwrite";
-import { compatibilityFlags } from "react-native-screens";
 
 //// track the searches made by a user
+
+// access keys
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 
@@ -49,6 +50,7 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
         searchTerm: query,
         movie_id: movie.id,
         count: 1,
+        title: movie.title,
         poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
       });
     }
