@@ -70,21 +70,25 @@ export default function Index() {
                 </Text>
               </View>
             )}
-            <>
-              <FlatList
-                horizontal // If true, renders items next to each other horizontally instead of stacked vertically. Allows to scroll them horizontally.
-                showsHorizontalScrollIndicator={false} // When true, shows a horizontal scroll indicator.
-                ItemSeparatorComponent={() => <View className="w-4" />}
-                // It lets you insert a custom component (like a line or space) between each item. It won’t show at the very top or very bottom, nor end or beginning — only between items.
-                data={trendingMovies}
-                renderItem={({ item, index }) => (
-                  <TrendingCard movie={item} index={index} />
-                  // passing a prop of movie={item} is an alternative way of spreading everything out. Sometimes it's better because we can console.log entire movie itself and see it's properties
-                )}
-                keyExtractor={(item) => item.movie_id.toString()}
-                className="mb-4 mt-3"
-              />
+            <FlatList
+              horizontal // If true, renders items next to each other horizontally instead of stacked vertically. Allows to scroll them horizontally.
+              showsHorizontalScrollIndicator={false} // When true, shows a horizontal scroll indicator.
+              ItemSeparatorComponent={() => <View className="w-4" />}
+              // It lets you insert a custom component (like a line or space) between each item. It won’t show at the very top or very bottom, nor end or beginning — only between items.
+              data={trendingMovies}
+              renderItem={({ item, index }) => (
+                <TrendingCard movie={item} index={index} />
+                // passing a prop of movie={item} is an alternative way of spreading everything out. Sometimes it's better because we can console.log entire movie itself and see it's properties
+              )}
+              keyExtractor={(item) => item.movie_id.toString()}
+              className="mb-4 mt-3"
+            />
 
+            <Text className="text-lg text-white font-bold mt-3 mb-5">
+              Latest movies
+            </Text>
+
+            <>
               <FlatList
                 // <FlatList /> is a performant way to render large scrollable lists. Unlike <ScrollView/>, it only renders the visible items, which boosts performance and reduces memory usage
                 data={movies} // An array (or array-like list) of items to render.

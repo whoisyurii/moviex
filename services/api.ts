@@ -43,4 +43,24 @@ export const fetchMovies = async ({ query }: { query: string }) => {
   // return contains actual movies that we want to get out of this function
 };
 
-// /discover/movie
+//// function to fetch details of a certain movie to provide into Movie Details
+
+export const fetchMovieDetails = async (
+  movieId: string
+): Promise<MovieDetails> => {
+  try {
+    const response = await fetch(
+      // endpoint which we wanna call
+      `${TMDB_CONFIG.BASE_URL}/movie/${movieId}?api_key=${TMDB_CONFIG.API_KEY}`,
+      { method: "GET", headers: TMDB_CONFIG.headers }
+    );
+
+    if (!response.ok) throw new Error("Failed to get movie details");
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log("Error:", error);
+  }
+};
