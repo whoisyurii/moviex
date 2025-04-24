@@ -5,6 +5,20 @@ import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
 import { icons } from "@/constants/icons";
 
+interface MovieInfoProps {
+  label: string;
+  value?: string | number | null;
+}
+
+const MovieInfo = ({ label, value }: MovieInfoProps) => (
+  <View className="flex-col items-start justify-center mt-5">
+    <Text className="text-light-200 font-normal text-sm">{label}</Text>
+    <Text className="text-light-100 font-bold text-sm mt-2">
+      {value || "N/A"}
+    </Text>
+  </View>
+);
+
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
   // framework-specific hook Next.js or Expo Router that retrieves URL search parameters (e.g., ?id=123).
@@ -50,6 +64,29 @@ const MovieDetails = () => {
               ({movie?.vote_count} votes)
             </Text>
           </View>
+          <MovieInfo label="Overview" value={movie?.overview} />
+          <MovieInfo
+            label="Genres"
+            value={movie?.genres?.map((g) => g.name).join("-") || "N/A"}
+            // .join Adds all the elements of an array into a string, separated by the specified separator string.
+          />
+          <View className="flex flex-row justify-between w-1/2">
+            <MovieInfo
+              label="Budget"
+              value={`$${movie?.budget / 1_000_000} million`}
+              // In modern JavaScript (ES2021+), the underscores (_) in numbers are used as numeric separators to make large numbers more readable.
+            />
+            <MovieInfo
+              label="Revenue"
+              value={`$${Math.round(movie?.revenue) / 1_000_000}`}
+            />
+          </View>
+          <MovieInfo
+            label="Production companies"
+            value={
+              movie?.production_companies.map((c) => c.name).join("-") || "N/A"
+            }
+          />
         </View>
       </ScrollView>
     </View>
